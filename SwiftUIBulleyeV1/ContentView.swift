@@ -15,6 +15,10 @@ struct ContentView: View {
     // stage for User Interface view
     @State var alertIsVisible: Bool = false
     @State var sliderValue: Double = 50.0   // @State : swift에게 변화하는지 주시하고 있으라고 한다.
+    @State var target: Int = Int.random(in: 1...100)
+    var sliderValueRounded: Int {
+        Int(self.sliderValue.rounded()) }
+    
     var body: some View {
         VStack {
             Spacer() // space처럼 공간 마련
@@ -22,7 +26,8 @@ struct ContentView: View {
             // target row
             HStack {
                 Text("Put the bullseye as close as you can do:")
-                Text("100")
+                //Text("100")
+                Text("\(self.target)")
             }
             Spacer()
             
@@ -37,15 +42,16 @@ struct ContentView: View {
             
             // button row
             Button(action: {
-                print("Button pressed!") // 버튼을 누르면 cmd 창에 출력된다.
+                //print("Button pressed!") // 버튼을 누르면 cmd 창에 출력된다.
+                print("Points awarded: \(self.pointsForCurrentRound())")
                 self.alertIsVisible = true // 버튼을 누르면 alert 창이 뜬다.
             }) {
                 Text("Hit me!") // user에게 보이는 버튼
             }
             // state for alert
             .alert(isPresented: self.$alertIsVisible) { // isPresented가 true이면 아래를 수행함
-                Alert(title: Text("Hello there!"), // alert 창의 제목(가장 위의 굵은 글씨)
-                    message: Text("The slider's value is \(Int(self.sliderValue.rounded()))."), // alert 창의 내용(제목 아래 위치) / 변수값 출력 / rounded() : 반올림
+                Alert(title: Text("Hello there!"),
+                      message: Text(self.scoringMessage()),
                       dismissButton: .default(Text("Awesome!"))) // alert 창의 확인 버튼(현재 한 개)
             }
             Spacer()
@@ -71,6 +77,25 @@ struct ContentView: View {
     }
     
     // methods
+    func pointsForCurrentRound() -> Int {
+        var difference: Int
+        
+        if self.sliderValueRounded > self.target {
+            difference = self.sliderValueRounded - self.target }
+        else if self.target > self.sliderValueRounded {
+            difference = self.target - self.sliderValueRounded }
+        else {
+            difference = 0
+        }
+        
+        return 100 - difference
+    }
+    
+    func scoringMessage() -> String {
+        return "The slider's value is \(Int(self.sliderValueRounded)).\n" +
+        "The target value is \(self.target).\n" +
+        "You scored \(pointsForCurrentRound()) points this record."
+    }
 }
 
 // preview
