@@ -13,9 +13,11 @@ struct ContentView: View {
     // ============
     
     // stage for User Interface view
-    @State var alertIsVisible: Bool = false
-    @State var sliderValue: Double = 50.0   // @State : swift에게 변화하는지 주시하고 있으라고 한다.
-    @State var target: Int = Int.random(in: 1...100)
+    @State var alertIsVisible = false
+    @State var sliderValue = 50.0   // @State : swift에게 변화하는지 주시하고 있으라고 한다.
+    @State var target = Int.random(in: 1...100)
+    @State var score = 0
+    @State var round = 1
     var sliderValueRounded: Int {
         Int(self.sliderValue.rounded()) }
     
@@ -52,7 +54,11 @@ struct ContentView: View {
             .alert(isPresented: self.$alertIsVisible) { // isPresented가 true이면 아래를 수행함
                 Alert(title: Text("Hello there!"),
                       message: Text(self.scoringMessage()),
-                      dismissButton: .default(Text("Awesome!"))) // alert 창의 확인 버튼(현재 한 개)
+                      dismissButton: .default(Text("Awesome!")){ // alert 창의 확인 버튼(현재 한 개)
+                self.score = self.score + self.pointsForCurrentRound()
+                self.target = Int.random(in: 1...100)
+                self.round += 1
+                })
             }
             Spacer()
             
@@ -64,10 +70,10 @@ struct ContentView: View {
                 }
                 Spacer()
                 Text("Score:")
-                Text("999999")
+                Text("\(self.score)")
                 Spacer()
                 Text("Round:")
-                Text("999")
+                Text("\(self.round)")
                 Spacer()
                 Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
                     Text("Inform")
@@ -78,17 +84,9 @@ struct ContentView: View {
     
     // methods
     func pointsForCurrentRound() -> Int {
-        var difference: Int
-        
-        if self.sliderValueRounded > self.target {
-            difference = self.sliderValueRounded - self.target }
-        else if self.target > self.sliderValueRounded {
-            difference = self.target - self.sliderValueRounded }
-        else {
-            difference = 0
-        }
-        
-        return 100 - difference
+        let maximumScore = 100
+        let difference = abs(self.sliderValueRounded - self.target)
+        return maximumScore - difference
     }
     
     func scoringMessage() -> String {
