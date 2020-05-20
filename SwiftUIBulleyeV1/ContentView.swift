@@ -12,6 +12,9 @@ struct ContentView: View {
     // properties
     // ============
     
+    // color
+    let midnightBlue = Color(red: 0, green: 0.2, blue: 0.4)
+    
     // stage for User Interface view
     @State var alertIsVisible = false
     @State var sliderValue = 50.0   // @State : swift에게 변화하는지 주시하고 있으라고 한다.
@@ -25,67 +28,91 @@ struct ContentView: View {
     }
     
     var body: some View {
-        VStack {
-            Spacer() // space처럼 공간 마련
-            
-            // target row
-            HStack {
-                Text("Put the bullseye as close as you can do:")
-                //Text("100")
-                Text("\(target)")
-            }
-            Spacer()
-            
-            // slider row
-            // TODO: add view for the slider row here
-            HStack {
-                Text("1")
-                Slider(value: $sliderValue, in: 1...100) // 시작화면에서는 초기값 50에 있음 / 1에서 100까지 수(double) 중에서 값이 정해짐
-                Text("100")
-            }
-            Spacer()
-            
-            // button row
-            Button(action: {
-                //print("Button pressed!") // 버튼을 누르면 cmd 창에 출력된다.
-                print("Points awarded: \(self.pointsForCurrentRound())")
-                self.alertIsVisible = true // 버튼을 누르면 alert 창이 뜬다.
-            }) {
-                Text("Hit me!") // user에게 보이는 버튼
-            }
-            // state for alert
-            .alert(isPresented: $alertIsVisible) { // isPresented가 true이면 아래를 수행함
-                Alert(title: Text(alertTitle()),
-                      message: Text(scoringMessage()),
-                      dismissButton: .default(Text("Awesome!")){ // alert 창의 확인 버튼(현재 한 개)
-                        self.startNewRound()
-                    })
-            }
-            Spacer()
-            
-            // score row
-            // TODO: add view for the score, rounds, and start over and info button
-            HStack {
+        NavigationView {
+            VStack {
+                Spacer() // space처럼 공간 마련
+                
+                // target row
+                HStack {
+                    Text("Put the bullseye as close as you can do:")
+                        .modifier(LabelStyle())
+                    Text("\(target)")
+                        .modifier(ValueStyle())
+                }
+                Spacer()
+                
+                // slider row
+                // TODO: add view for the slider row here
+                HStack {
+                    Text("1")
+                        .modifier(LabelStyle())
+                    Slider(value: $sliderValue, in: 1...100)
+                        .accentColor(midnightBlue)
+                    Text("100")
+                        .modifier(LabelStyle())
+                }
+                Spacer()
+                
+                // button row
                 Button(action: {
-                    self.startNewGame()
+                    //print("Button pressed!") // 버튼을 누르면 cmd 창에 출력된다.
+                    print("Points awarded: \(self.pointsForCurrentRound())")
+                    self.alertIsVisible = true // 버튼을 누르면 alert 창이 뜬다.
                 }) {
-                    Text("Start Over")
+                    Text("Hit me!").modifier(ButtonLargeTextStyle())
+                }
+                .background(Image("Button"))
+                .modifier(Shadow())
+                // state for alert
+                .alert(isPresented: $alertIsVisible) { // isPresented가 true이면 아래를 수행함
+                    Alert(title: Text(alertTitle()),
+                          message: Text(scoringMessage()),
+                          dismissButton: .default(Text("Awesome!")){ // alert 창의 확인 버튼(현재 한 개)
+                            self.startNewRound()
+                        })
                 }
                 Spacer()
-                Text("Score:")
-                Text("\(score)")
-                Spacer()
-                Text("Round:")
-                Text("\(round)")
-                Spacer()
-                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
-                    Text("Inform")
-                }
-            }.padding(.bottom, 20) // 마지막 아래 공간 두기(20칸 정도)
+                
+                // score row
+                // TODO: add view for the score, rounds, and start over and info button
+                HStack {
+                    Button(action: {
+                        self.startNewGame()
+                    }) {
+                        HStack {
+                            Image("StartOverIcon")
+                            Text("Start Over").modifier(ButtonSmallTextStyle())
+                        }
+                    }
+                    .background(Image("Button"))
+                    .modifier(Shadow())
+                    Spacer()
+                    Text("Score:")
+                        .modifier(LabelStyle())
+                    Text("\(score)")
+                        .modifier(ValueStyle())
+                    Spacer()
+                    Text("Round:")
+                        .modifier(LabelStyle())
+                    Text("\(round)")
+                        .modifier(ValueStyle())
+                    Spacer()
+                    NavigationLink(destination: AboutView()) {
+                        HStack {
+                            Image("InfoIcon")
+                            Text("Inform").modifier(ButtonSmallTextStyle())
+                        }
+                    }
+                    .background(Image("Button"))
+                    .modifier(Shadow())
+                }.padding(.bottom, 20) // 마지막 아래 공간 두기(20칸 정도)
+            }
+            .onAppear() {
+                self.startNewGame()
+            }
+            .background(Image("Background"))
         }
-        .onAppear() {
-            self.startNewGame()
-        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     // methods
@@ -137,6 +164,52 @@ struct ContentView: View {
     func resetSliderAndTarget() {
         sliderValue = Double.random(in: 1...100)
         target = Int.random(in: 1...100)
+    }
+}
+
+// view modifiers
+// ===============
+struct LabelStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(Font.custom("Arial Rounded MT Bold", size: 18))
+            .foregroundColor(Color.white)
+            .modifier(Shadow())
+    }
+}
+
+struct ValueStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(Font.custom("Arial Rounded MT Bold", size: 24))
+            .foregroundColor(Color.yellow)
+            .modifier(Shadow())
+    }
+}
+
+// shadow
+struct Shadow: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .shadow(color: Color.black, radius: 5, x: 2, y: 2)
+    }
+}
+
+// for the "Hit me!" button
+struct ButtonLargeTextStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(Font.custom("Arial Rounded MT Bold", size: 18))
+            .foregroundColor(Color.black)
+    }
+}
+
+// for the "Start Over" and "Info" buttons
+struct ButtonSmallTextStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(Font.custom("Arial Rounded MT Bold", size: 12))
+            .foregroundColor(Color.black)
     }
 }
 
