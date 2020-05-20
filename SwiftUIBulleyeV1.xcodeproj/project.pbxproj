@@ -18,7 +18,7 @@
 
 /* Begin PBXFileReference section */
 		995F28BF2474FCA600178C01 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		998A73A1246B987E001E3672 /* SwiftUIBulleyeV1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIBulleyeV1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		998A73A1246B987E001E3672 /* BulleyeV1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BulleyeV1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		998A73A4246B987E001E3672 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		998A73A6246B987E001E3672 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		998A73A8246B987E001E3672 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		998A73A2246B987E001E3672 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				998A73A1246B987E001E3672 /* SwiftUIBulleyeV1.app */,
+				998A73A1246B987E001E3672 /* BulleyeV1.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,7 +95,7 @@
 			);
 			name = SwiftUIBulleyeV1;
 			productName = SwiftUIBulleyeV1;
-			productReference = 998A73A1246B987E001E3672 /* SwiftUIBulleyeV1.app */;
+			productReference = 998A73A1246B987E001E3672 /* BulleyeV1.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -298,7 +298,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = kr.ac.sogang.cscp2.20171655.SwiftUIBulleyeV1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = BulleyeV1;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -318,7 +318,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = kr.ac.sogang.cscp2.20171655.SwiftUIBulleyeV1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = BulleyeV1;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
